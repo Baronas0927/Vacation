@@ -7,18 +7,22 @@ import java.util.stream.Collectors;
 import static org.example.Main.vacations;
 
 public class Vacation {
-    private static int idCounter = vacations.stream()
-            .filter(v -> v.getId() != vacations.stream().max(Comparator.comparingInt(Vacation::getId))
-            .orElse(new Vacation(0, "", "", "", "", new String[]{}, 0.0, "", new int[0])).getId())
+    private static long idCounter = vacations.stream()
+            .filter(v -> v.getId() != vacations.stream().max(Comparator.comparingLong(Vacation::getId))
+                    .orElse(new Vacation(0, "", "", "", "", new String[]{}, 0.0, "", new int[0])).getId())
             .map(Vacation::getId)
             .findFirst()
-            .orElse(0);
+            .orElse((long) 0);
 
-    private int id;
+    private long id;
     private String title;
     private String country;
     private String city;
     private String season;
+    private String[] photos;
+    private double price;
+    private String description;
+    private int[] rating;
 
     public String[] getPhotos() {
         return photos;
@@ -28,16 +32,11 @@ public class Vacation {
         this.photos = photos;
     }
 
-    private String[] photos;
-    private double price;
-    private String description;
-    private int[] rating;
-
     public Vacation() {
     }
 
     public Vacation(String title, String country, String city, String season, String[] photos, double price, String description) {
-      //create
+        //create
         this.id = ++idCounter;
         this.title = title;
         this.country = country;
@@ -48,7 +47,8 @@ public class Vacation {
         this.description = description;
         this.rating = new int[]{};
     }
-    public Vacation(int id, String title, String country, String city, String season, String[] photos, double price, String description, int[] rating) {
+
+    public Vacation(long id, String title, String country, String city, String season, String[] photos, double price, String description, int[] rating) {
         //edit
         this.id = id;
         this.title = title;
@@ -61,7 +61,7 @@ public class Vacation {
         this.rating = rating;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -133,7 +133,7 @@ public class Vacation {
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", season='" + season + '\'' +
-                ", photos='" + url + '\'' +
+                ", photos='" + photos + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 ", rating=" + Arrays.toString(rating) +

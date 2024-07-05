@@ -1,4 +1,5 @@
-{
+[
+  {
   "title": "",
   "country": "",
   "city": "",
@@ -8,3 +9,4 @@
   "description": "Sample Description",
   "rating": [5, 4, 3, 5, 4]
 }
+]

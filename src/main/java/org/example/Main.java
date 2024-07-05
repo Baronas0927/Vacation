@@ -47,9 +47,9 @@ public class Main {
                 String season = jsonObject.get("season").getAsString();
                 String url = jsonObject.get("url").getAsString();
                 double price = jsonObject.get("price").getAsDouble();
-                String description = jsonObject.get("description").getAsString();
-                int rating = jsonObject.get("rating").getAsInt();
-
+                int[] ratings = Arrays.stream(jsonObject.get("rating").getAsString().split(","))
+                        .mapToInt(Integer::parseInt)
+                        .toArray();
             }
         }
     }
