@@ -1,12 +1,18 @@
 [
   {
-  "title": "",
-  "country": "",
-  "city": "",
-  "season": "",
-  "url": "",
-  "price": 999.99,
-  "description": "Sample Description",
-  "rating": [5, 4, 3, 5, 4]
-}
+    "title": "",
+    "country": "",
+    "city": "",
+    "season": "",
+    "url": "",
+    "price": 999.99,
+    "description": "Sample Description",
+    "rating": [
+      5,
+      4,
+      3,
+      5,
+      4
+    ]
+  }
 ]

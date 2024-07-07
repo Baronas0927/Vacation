@@ -24,21 +24,20 @@ public class Main {
         server.createContext("/getVacations", new Handler());
         server.createContext("/getVacation", new Handler());
         server.createContext("/deleteVacation", new Handler());
-        server.createContext("/deleteUser", new Handler());
-
         server.setExecutor(null);
         server.start();
 //http://127.0.0.1:8000/getUser?id=5
         loadVacation();
         saveVacations();
     }
+
     public static void loadVacation() throws IOException {
-        try(FileReader reader = new FileReader("Vacation.json")){
+        try (FileReader reader = new FileReader("Vacation.json")) {
             // Parse the JSON file
             JsonElement jsonElement = JsonParser.parseReader(reader);
             JsonArray jsonArray = jsonElement.getAsJsonArray();
             // Iterate through the JSON array
-            for (JsonElement element: jsonArray){
+            for (JsonElement element : jsonArray) {
                 JsonObject jsonObject = element.getAsJsonObject();
                 // Extract fields from JSON object
                 String title = jsonObject.get("title").getAsString();
@@ -53,6 +52,7 @@ public class Main {
             }
         }
     }
+
     private void handleVacation(HttpExchange exchange) throws IOException {
         String query = exchange.getRequestURI().getQuery();
         Map<String, String> params = queryToMap(query);
@@ -72,6 +72,7 @@ public class Main {
         os.write(response.getBytes());
         os.close();
     }
+
     private Map<String, String> queryToMap(String query) {
         Map<String, String> result = new HashMap<>();
         for (String param : query.split("&")) {
@@ -84,10 +85,11 @@ public class Main {
         }
         return result;
     }
-    public static void saveVacations(){
-        try (FileWriter writer = new FileWriter("Vacations.json")){
-            gson.toJson(vacations,writer);
-        }catch (IOException e){
+
+    public static void saveVacations() {
+        try (FileWriter writer = new FileWriter("Vacations.json")) {
+            gson.toJson(vacations, writer);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
