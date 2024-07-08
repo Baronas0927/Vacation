@@ -2,7 +2,6 @@ package org.example;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import static org.example.Main.vacations;
 
@@ -69,7 +68,6 @@ public class Vacation {
         this.id = id;
     }
 
-
     public String getTitle() {
         return title;
     }
@@ -83,7 +81,7 @@ public class Vacation {
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.country = this.country;
     }
 
     public String getCity() {
@@ -91,7 +89,7 @@ public class Vacation {
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.city = this.city;
     }
 
     public String getSeason() {
@@ -99,7 +97,7 @@ public class Vacation {
     }
 
     public void setSeason(String season) {
-        this.season = season;
+        this.season = this.season;
     }
 
     public double getPrice() {

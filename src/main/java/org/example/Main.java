@@ -19,6 +19,7 @@ public class Main {
     public static Gson gson = new Gson();
 
     public static void main(String[] args) throws IOException {
+        loadVacation();
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/createVacation", new Handler());
         server.createContext("/getVacations", new Handler());
@@ -27,10 +28,8 @@ public class Main {
         server.setExecutor(null);
         server.start();
 //http://127.0.0.1:8000/getUser?id=5
-        loadVacation();
-        saveVacations();
+        //saveVacations();
     }
-
     public static void loadVacation() throws IOException {
         try (FileReader reader = new FileReader("Vacation.json")) {
             // Parse the JSON file
@@ -40,16 +39,28 @@ public class Main {
             for (JsonElement element : jsonArray) {
                 JsonObject jsonObject = element.getAsJsonObject();
                 // Extract fields from JSON object
+                Long id = jsonObject.getAsLong();
                 String title = jsonObject.get("title").getAsString();
                 String country = jsonObject.get("country").getAsString();
                 String city = jsonObject.get("city").getAsString();
                 String season = jsonObject.get("season").getAsString();
-                String url = jsonObject.get("url").getAsString();
+//                String url = jsonObject.get("url").getAsString();
                 double price = jsonObject.get("price").getAsDouble();
                 int[] ratings = Arrays.stream(jsonObject.get("rating").getAsString().split(","))
                         .mapToInt(Integer::parseInt)
                         .toArray();
+                String[] photos = jsonObject.get("photos").getAsString().split(",");
+                Vacation vacation = new Vacation();
+                vacation.setId(Math.toIntExact(id));
+                vacation.setTitle(title);
+                vacation.setCountry(country);
+                vacation.setCity(city);
+                vacation.setSeason(season);
+                vacation.setPhotos(photos);
+                vacations.add(vacation);
             }
+        }catch (Exception e){
+            System.out.println(e);
         }
     }
 
