@@ -31,7 +31,7 @@ public class Main {
         //saveVacations();
     }
     public static void loadVacation() throws IOException {
-        try (FileReader reader = new FileReader("Vacation.json")) {
+        try (FileReader reader = new FileReader("Vacations.json")) {
             // Parse the JSON file
             JsonElement jsonElement = JsonParser.parseReader(reader);
             JsonArray jsonArray = jsonElement.getAsJsonArray();
@@ -39,17 +39,16 @@ public class Main {
             for (JsonElement element : jsonArray) {
                 JsonObject jsonObject = element.getAsJsonObject();
                 // Extract fields from JSON object
-                Long id = jsonObject.getAsLong();
+                Long id = jsonObject.get("id").getAsLong();
                 String title = jsonObject.get("title").getAsString();
                 String country = jsonObject.get("country").getAsString();
                 String city = jsonObject.get("city").getAsString();
                 String season = jsonObject.get("season").getAsString();
 //                String url = jsonObject.get("url").getAsString();
                 double price = jsonObject.get("price").getAsDouble();
-                int[] ratings = Arrays.stream(jsonObject.get("rating").getAsString().split(","))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-                String[] photos = jsonObject.get("photos").getAsString().split(",");
+                int[] ratings = new Gson().fromJson(jsonObject.get("rating").getAsJsonArray(), int[].class);
+                String[] photos = new Gson().fromJson(jsonObject.get("photos").getAsJsonArray(), String[].class);
+
                 Vacation vacation = new Vacation();
                 vacation.setId(Math.toIntExact(id));
                 vacation.setTitle(title);
@@ -60,7 +59,7 @@ public class Main {
                 vacations.add(vacation);
             }
         }catch (Exception e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

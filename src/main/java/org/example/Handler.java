@@ -3,8 +3,7 @@ package org.example;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +17,7 @@ public class Handler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
         String method = exchange.getRequestMethod();
+        handleCORS(exchange);
         if (path.equals("/createVacation") && method.equals("POST")) {
             handleCreateVacation(exchange);
         }
@@ -42,6 +42,17 @@ public class Handler implements HttpHandler {
         os.close();
     }
 
+    private void handleCORS(HttpExchange exchange) {
+        // Allow requests from all origins
+        exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+        // Allow specific methods
+        exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        // Allow specific headers
+        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "*");
+        // Allow credentials, if needed
+        exchange.getResponseHeaders().set("Access-Control-Allow-Credentials", "true");
+    }
+
     private void handleGetVacations(HttpExchange exchange) throws IOException {
         String response = gson.toJson(vacations);
         exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -60,9 +71,36 @@ public class Handler implements HttpHandler {
     }
 
     private void handleCreateVacation(HttpExchange exchange) throws IOException {
-        String query = exchange.getRequestURI().getQuery();
-        Map<String, String> params = queryToMap(query);
-        String title = String.valueOf(params.get("title"));
+        System.out.println("handleCreateVacation");
+            InputStream requestBody = exchange.getRequestBody();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+            String  dataString = "";
+            String line;
+        try {
+            while (true) {
+                if (!((line = reader.readLine()) != null)) break;
+                dataString += line;
+            }
+            reader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+            System.out.println(dataString);
+            Vacation vacation = new Vacation();
+            try {
+            vacation = gson.fromJson(dataString.toString(), Vacation.class);
+            }catch (Exception e){
+                System.out.println("gson");
+                e.printStackTrace();
+            }
+            vacations.add(vacation);
+            saveVacations();
+//            requestBody.close();
+        String response = "Vacation has been created succesfully";
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
     }
 
     private void handleUpdateVacation(HttpExchange exchange) throws IOException {
