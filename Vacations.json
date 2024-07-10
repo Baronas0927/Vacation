@@ -1,0 +1,57 @@
+[
+  {
+    "id": 12345,
+    "title": "Tropical Paradise",
+    "country": "Maldives",
+    "city": "Male",
+    "season": "Summer",
+    "photos": ["photo1.jpg", "photo2.jpg", "photo3.jpg"],
+    "price": 2500.00,
+    "description": "Enjoy a relaxing vacation in the beautiful Maldives. Experience crystal clear waters, white sandy beaches, and luxury resorts.",
+    "rating": [5, 4, 5, 4, 5]
+  },
+  {
+    "id": 12346,
+    "title": "Mountain Adventure",
+    "country": "Switzerland",
+    "city": "Zermatt",
+    "season": "Winter",
+    "photos": ["photo4.jpg", "photo5.jpg", "photo6.jpg"],
+    "price": 3000.00,
+    "description": "Explore the Swiss Alps with a thrilling mountain adventure. Perfect for skiing, snowboarding, and enjoying stunning views.",
+    "rating": [5, 5, 5, 4, 5]
+  },
+  {
+    "id": 12347,
+    "title": "City Lights",
+    "country": "USA",
+    "city": "New York",
+    "season": "Autumn",
+    "photos": ["photo7.jpg", "photo8.jpg", "photo9.jpg"],
+    "price": 1500.00,
+    "description": "Experience the vibrant city life of New York. Visit iconic landmarks, enjoy world-class dining, and shop till you drop.",
+    "rating": [4, 4, 4, 5, 5]
+  },
+  {
+    "id": 12348,
+    "title": "Beach Escape",
+    "country": "Thailand",
+    "city": "Phuket",
+    "season": "Spring",
+    "photos": ["photo10.jpg", "photo11.jpg", "photo12.jpg"],
+    "price": 2000.00,
+    "description": "Relax on the beautiful beaches of Phuket. Enjoy water sports, explore local culture, and unwind at luxury resorts.",
+    "rating": [5, 4, 4, 5, 5]
+  },
+  {
+    "id": 12349,
+    "title": "Cultural Journey",
+    "country": "Japan",
+    "city": "Kyoto",
+    "season": "Spring",
+    "photos": ["photo13.jpg", "photo14.jpg", "photo15.jpg"],
+    "price": 2200.00,
+    "description": "Discover the rich cultural heritage of Kyoto. Visit historic temples, stroll through serene gardens, and experience traditional tea ceremonies.",
+    "rating": [5, 5, 4, 5, 5]
+  }
+]

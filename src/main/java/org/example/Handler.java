@@ -62,8 +62,7 @@ public class Handler implements HttpHandler {
     }
 
     private void handleGetVacation(HttpExchange exchange) throws IOException {
-        // if(exchange.getRequestMethod().equals("GET")) {
-        String response = gson.toJson(vacations);
+        String response = gson.toJson(vacations);//reik get query padaryt
         exchange.sendResponseHeaders(200, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());
@@ -103,54 +102,111 @@ public class Handler implements HttpHandler {
         os.close();
     }
 
-    private void handleUpdateVacation(HttpExchange exchange) throws IOException {
-        //update vacation
-        String query = exchange.getRequestURI().getQuery();
-        Map<String, String> params = queryToMap(query);
-        long id = Long.parseLong(params.get("id"));
-        String title = String.join(params.get("title"));
-        String country = String.join(params.get("country"));
-        String city = String.join(params.get("city"));
-        String season = String.join(params.get("season"));
-        String[] photos = params.get("photos").split(",");
-        double price = Double.parseDouble(params.get("price"));
-        String description = String.join(params.get("title"));
-        int[] rating = new int[]{Integer.parseInt(params.get(""))};
+//    private void handleUpdateVacation(HttpExchange exchange) throws IOException {
+//        //update vacation
+//        String query = exchange.getRequestURI().getQuery();
+//        Map<String, String> params = queryToMap(query);
+//        long id = Long.parseLong(params.get("id"));
+//        String title = String.join(params.get("title"));
+//        String country = String.join(params.get("country"));
+//        String city = String.join(params.get("city"));
+//        String season = String.join(params.get("season"));
+//        String[] photos = params.get("photos").split(",");
+//        double price = Double.parseDouble(params.get("price"));
+//        String description = String.join(params.get("title"));
+//        int[] rating = new int[]{Integer.parseInt(params.get(""))};
+//        Vacation vacation = new Vacation(id, title, country, city, season, photos, price, title, rating);
+//        vacations.stream()
+//                .filter(vacation1 -> vacation1.getId() == vacation.getId())
+//                .findFirst()
+//                .map(existingVacation -> {
+//                    vacations.set(vacations.indexOf(existingVacation), vacation);
+//                    return true;
+//                })
+//                .orElseGet(() -> {
+//                    vacations.add(vacation);
+//                    return false;
+//                });
+//        saveVacations();
+//        String response = "Vacation has been updated succesfully";
+//        exchange.sendResponseHeaders(200, response.getBytes().length);
+//        OutputStream os = exchange.getResponseBody();
+//        os.write(response.getBytes());
+//        os.close();
+//    }
+private void handleUpdateVacation(HttpExchange exchange) throws IOException {
+    Vacation vacationToUpdate = requestVacation(exchange);
+    vacations.stream()
+            .filter(v -> v.getId() == vacationToUpdate.getId())
+            .findFirst()
+            .map(existingVacation -> {
+                vacations.set(vacations.indexOf(existingVacation), vacationToUpdate);
+                return true;
+            })
+            .orElseGet(() -> {
+                vacations.add(vacationToUpdate);
+                return false;
+            });
+    saveVacations();
+    String response = "Vacation has been updated successfully";
+    exchange.sendResponseHeaders(200, response.getBytes().length);
+    OutputStream os = exchange.getResponseBody();
+    os.write(response.getBytes());
+    os.close();
+}
 
-        Vacation vacation = new Vacation(id, title, country, city, season, photos, price, title, rating);
-        vacations.stream()
-                .filter(vacation1 -> vacation1.getId() == vacation.getId())
-                .findFirst()
-                .map(existingVacation -> {
-                    vacations.set(vacations.indexOf(existingVacation), vacation);
-                    return true;
-                })
-                .orElseGet(() -> {
-                    vacations.add(vacation);
-                    return false;
-                });
-        saveVacations();
-        String response = "Vacation has been updated succesfully";
-        exchange.sendResponseHeaders(200, response.getBytes().length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+//    private void handleDeleteVacation(HttpExchange exchange) {
+//        //delete vacation
+//        System.out.println("delete vacation");
+//        String query = exchange.getRequestURI().getQuery();
+//        long id = Long.parseLong(query.split("=")[1]);
+//        boolean removed = vacations.removeIf(vacation -> vacation.getId() == id);
+//        System.out.println("blo");
+//        try {
+//        if (removed) {
+//            saveVacations();
+//            System.out.println("bla");
+//            String response = "Vacation has been deleted successfully";
+//            exchange.sendResponseHeaders(200, response.getBytes().length);
+//            OutputStream os = exchange.getResponseBody();
+//            os.write(response.getBytes());
+//            os.close();
+//        } else {
+//            exchange.sendResponseHeaders(404, -1);
+//        }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+private Vacation requestVacation(HttpExchange exchange) throws IOException {
+    InputStream requestBody = exchange.getRequestBody();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+    String dataString = "";
+    String line;
+    while ((line = reader.readLine()) != null) {
+        dataString += line;
     }
+    System.out.println(dataString);
+    reader.close();
+    Vacation vacation = gson.fromJson(dataString, Vacation.class);
+    return vacation;
+}
 
     private void handleDeleteVacation(HttpExchange exchange) throws IOException {
-        //delete vacation
-        String query = exchange.getRequestURI().getQuery();
-        long id = Long.parseLong(query.split("=")[1]);
-        boolean removed = vacations.removeIf(vacation -> vacation.getId() == id);
-        if (removed) {
-            saveVacations();
-            String response = "Vacation has been deleted successfully";
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        } else {
-            exchange.sendResponseHeaders(404, -1);
+        Vacation vacationToDelete = requestVacation(exchange);
+        boolean removed = vacations.removeIf(v -> v.getId() == vacationToDelete.getId());
+        try {
+            if (removed) {
+                saveVacations();
+                String response = "Vacation has been deleted successfully";
+                System.out.println(response);
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

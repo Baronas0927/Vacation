@@ -19,7 +19,7 @@ public class Main {
     public static Gson gson = new Gson();
 
     public static void main(String[] args) throws IOException {
-        loadVacation();
+
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/createVacation", new Handler());
         server.createContext("/getVacations", new Handler());
@@ -27,7 +27,8 @@ public class Main {
         server.createContext("/deleteVacation", new Handler());
         server.setExecutor(null);
         server.start();
-//http://127.0.0.1:8000/getUser?id=5
+        loadVacation();
+//http://127.0.0.1:8000/getVacation?id=5
         //saveVacations();
     }
     public static void loadVacation() throws IOException {
@@ -44,7 +45,6 @@ public class Main {
                 String country = jsonObject.get("country").getAsString();
                 String city = jsonObject.get("city").getAsString();
                 String season = jsonObject.get("season").getAsString();
-//                String url = jsonObject.get("url").getAsString();
                 double price = jsonObject.get("price").getAsDouble();
                 int[] ratings = new Gson().fromJson(jsonObject.get("rating").getAsJsonArray(), int[].class);
                 String[] photos = new Gson().fromJson(jsonObject.get("photos").getAsJsonArray(), String[].class);
