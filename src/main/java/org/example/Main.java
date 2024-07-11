@@ -12,7 +12,6 @@ import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     public static List<Vacation> vacations = new ArrayList<>();
@@ -25,6 +24,7 @@ public class Main {
         server.createContext("/getVacations", new Handler());
         server.createContext("/getVacation", new Handler());
         server.createContext("/deleteVacation", new Handler());
+        server.createContext("/updateVacation", new Handler());
         server.setExecutor(null);
         server.start();
         loadVacation();
@@ -98,6 +98,7 @@ public class Main {
 
     public static void saveVacations() {
         try (FileWriter writer = new FileWriter("Vacations.json")) {
+            System.out.println(vacations);
             gson.toJson(vacations, writer);
         } catch (IOException e) {
             e.printStackTrace();

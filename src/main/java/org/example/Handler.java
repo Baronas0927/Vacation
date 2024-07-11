@@ -18,6 +18,7 @@ public class Handler implements HttpHandler {
         String path = exchange.getRequestURI().getPath();
         String method = exchange.getRequestMethod();
         handleCORS(exchange);
+
         if (path.equals("/createVacation") && method.equals("POST")) {
             handleCreateVacation(exchange);
         }
@@ -61,13 +62,35 @@ public class Handler implements HttpHandler {
         os.close();
     }
 
-    private void handleGetVacation(HttpExchange exchange) throws IOException {
-        String response = gson.toJson(vacations);//reik get query padaryt
-        exchange.sendResponseHeaders(200, response.getBytes().length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+//    private void handleGetVacation(HttpExchange exchange) throws IOException {
+//        String response = gson.toJson(vacations);//reik get query padaryt
+//        exchange.sendResponseHeaders(200, response.getBytes().length);
+//        OutputStream os = exchange.getResponseBody();
+//        os.write(response.getBytes());
+//        os.close();
+//    }
+//chatgpt
+    public void handleGetVacation(HttpExchange exchange) throws IOException {
+
+        if ("GET".equals(exchange.getRequestMethod())) {
+            String query = exchange.getRequestURI().getQuery();
+            Map<String, String> params = queryToMap(query);
+
+            long id = Long.parseLong(params.get("id"));
+            Vacation vacation = vacations.stream()
+                    .filter(v -> v.getId() == id)
+                    .findFirst()
+                    .orElse(new Vacation());
+            String response = gson.toJson(vacation);
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        } else {
+            exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+        }
     }
+
 
     private void handleCreateVacation(HttpExchange exchange) throws IOException {
         System.out.println("handleCreateVacation");
@@ -81,6 +104,7 @@ public class Handler implements HttpHandler {
                 dataString += line;
             }
             reader.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
