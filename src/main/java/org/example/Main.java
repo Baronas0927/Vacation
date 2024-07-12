@@ -29,7 +29,6 @@ public class Main {
         server.start();
         loadVacation();
 //http://127.0.0.1:8000/getVacation?id=5
-        //saveVacations();
     }
     public static void loadVacation() throws IOException {
         try (FileReader reader = new FileReader("Vacations.json")) {
@@ -57,11 +56,13 @@ public class Main {
                 vacation.setCity(city);
                 vacation.setSeason(season);
                 vacation.setPhotos(photos);
+                vacation.setRating(ratings);
                 System.out.println(vacation);
                 vacations.add(vacation);
+
             }
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 
@@ -70,7 +71,7 @@ public class Main {
             System.out.println(vacations);
             gson.toJson(vacations, writer);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 

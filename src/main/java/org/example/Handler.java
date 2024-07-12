@@ -63,14 +63,6 @@ public class Handler implements HttpHandler {
         os.close();
     }
 
-//    private void handleGetVacation(HttpExchange exchange) throws IOException {
-//        String response = gson.toJson(vacations);//reik get query padaryt
-//        exchange.sendResponseHeaders(200, response.getBytes().length);
-//        OutputStream os = exchange.getResponseBody();
-//        os.write(response.getBytes());
-//        os.close();
-//    }
-//chatgpt
     public void handleGetVacation(HttpExchange exchange) throws IOException {
 
         if ("GET".equals(exchange.getRequestMethod())) {
@@ -119,7 +111,6 @@ public class Handler implements HttpHandler {
             }
             vacations.add(vacation);
             saveVacations();
-//            requestBody.close();
         String response = "Vacation has been created succesfully";
         exchange.sendResponseHeaders(200, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();
@@ -127,38 +118,7 @@ public class Handler implements HttpHandler {
         os.close();
     }
 
-//    private void handleUpdateVacation(HttpExchange exchange) throws IOException {
-//        //update vacation
-//        String query = exchange.getRequestURI().getQuery();
-//        Map<String, String> params = queryToMap(query);
-//        long id = Long.parseLong(params.get("id"));
-//        String title = String.join(params.get("title"));
-//        String country = String.join(params.get("country"));
-//        String city = String.join(params.get("city"));
-//        String season = String.join(params.get("season"));
-//        String[] photos = params.get("photos").split(",");
-//        double price = Double.parseDouble(params.get("price"));
-//        String description = String.join(params.get("title"));
-//        int[] rating = new int[]{Integer.parseInt(params.get(""))};
-//        Vacation vacation = new Vacation(id, title, country, city, season, photos, price, title, rating);
-//        vacations.stream()
-//                .filter(vacation1 -> vacation1.getId() == vacation.getId())
-//                .findFirst()
-//                .map(existingVacation -> {
-//                    vacations.set(vacations.indexOf(existingVacation), vacation);
-//                    return true;
-//                })
-//                .orElseGet(() -> {
-//                    vacations.add(vacation);
-//                    return false;
-//                });
-//        saveVacations();
-//        String response = "Vacation has been updated succesfully";
-//        exchange.sendResponseHeaders(200, response.getBytes().length);
-//        OutputStream os = exchange.getResponseBody();
-//        os.write(response.getBytes());
-//        os.close();
-//    }
+
 private void handleUpdateVacation(HttpExchange exchange) throws IOException {
     Vacation vacationToUpdate = requestVacation(exchange);
     vacations.stream()
@@ -180,29 +140,7 @@ private void handleUpdateVacation(HttpExchange exchange) throws IOException {
     os.close();
 }
 
-//    private void handleDeleteVacation(HttpExchange exchange) {
-//        //delete vacation
-//        System.out.println("delete vacation");
-//        String query = exchange.getRequestURI().getQuery();
-//        long id = Long.parseLong(query.split("=")[1]);
-//        boolean removed = vacations.removeIf(vacation -> vacation.getId() == id);
-//        System.out.println("blo");
-//        try {
-//        if (removed) {
-//            saveVacations();
-//            System.out.println("bla");
-//            String response = "Vacation has been deleted successfully";
-//            exchange.sendResponseHeaders(200, response.getBytes().length);
-//            OutputStream os = exchange.getResponseBody();
-//            os.write(response.getBytes());
-//            os.close();
-//        } else {
-//            exchange.sendResponseHeaders(404, -1);
-//        }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
+
 private Vacation requestVacation(HttpExchange exchange)  {
     Vacation vacation = new Vacation();
         try {
@@ -213,16 +151,17 @@ private Vacation requestVacation(HttpExchange exchange)  {
             while ((line = reader.readLine()) != null) {
                 dataString += line;
             }
-            System.out.println(dataString);
             reader.close();
             System.out.println(dataString);
-             vacation = gson.fromJson(dataString, Vacation.class);
+            vacation = gson.fromJson(dataString, Vacation.class);
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);
         }
 
     return vacation;
 }
+
+
 
     private void handleDeleteVacation(HttpExchange exchange) throws IOException {
         Vacation vacationToDelete = requestVacation(exchange);
