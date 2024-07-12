@@ -81,7 +81,7 @@ public class Vacation {
     }
 
     public void setCountry(String country) {
-        this.country = this.country;
+        this.country = country;
     }
 
     public String getCity() {
@@ -89,7 +89,7 @@ public class Vacation {
     }
 
     public void setCity(String city) {
-        this.city = this.city;
+        this.city = city;
     }
 
     public String getSeason() {
@@ -97,7 +97,7 @@ public class Vacation {
     }
 
     public void setSeason(String season) {
-        this.season = this.season;
+        this.season = season;
     }
 
     public double getPrice() {

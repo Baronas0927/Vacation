@@ -56,6 +56,7 @@ public class Handler implements HttpHandler {
 
     private void handleGetVacations(HttpExchange exchange) throws IOException {
         String response = gson.toJson(vacations);
+        System.out.println(vacations);
         exchange.sendResponseHeaders(200, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());
@@ -202,17 +203,24 @@ private void handleUpdateVacation(HttpExchange exchange) throws IOException {
 //            e.printStackTrace();
 //        }
 //    }
-private Vacation requestVacation(HttpExchange exchange) throws IOException {
-    InputStream requestBody = exchange.getRequestBody();
-    BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
-    String dataString = "";
-    String line;
-    while ((line = reader.readLine()) != null) {
-        dataString += line;
-    }
-    System.out.println(dataString);
-    reader.close();
-    Vacation vacation = gson.fromJson(dataString, Vacation.class);
+private Vacation requestVacation(HttpExchange exchange)  {
+    Vacation vacation = new Vacation();
+        try {
+            InputStream requestBody = exchange.getRequestBody();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(requestBody));
+            String dataString = "";
+            String line;
+            while ((line = reader.readLine()) != null) {
+                dataString += line;
+            }
+            System.out.println(dataString);
+            reader.close();
+            System.out.println(dataString);
+             vacation = gson.fromJson(dataString, Vacation.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     return vacation;
 }
 
